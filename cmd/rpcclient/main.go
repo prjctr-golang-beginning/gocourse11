@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net/rpc/jsonrpc"
+	log "rpc"
 )
 
 type Args struct {
@@ -20,17 +21,17 @@ func main() {
 
 	err = client.Call("Calculator.Add", args, &result)
 	if err != nil {
-		panic(err)
+		log.Error(err.Error())
 	}
 
-	fmt.Printf("%d + %d = %d\n", args.A, args.B, result)
+	log.Info(fmt.Sprintf("%d + %d = %d\n", args.A, args.B, result))
 
 	args = &Args{4, 2}
 
 	err = client.Call("Calculator.Divide", args, &result)
 	if err != nil {
-		panic(err)
+		log.Error(err.Error())
 	}
 
-	fmt.Printf("%d / %d = %d\n", args.A, args.B, result)
+	log.Info(fmt.Sprintf("%d / %d = %d\n", args.A, args.B, result))
 }

@@ -5,6 +5,7 @@ import (
 	"net"
 	"net/rpc"
 	"net/rpc/jsonrpc"
+	log "rpc"
 )
 
 type Calculator int
@@ -15,16 +16,19 @@ type Args struct {
 
 func (c *Calculator) Add(args *Args, result *int) error {
 	*result = args.A + args.B
+	log.Info(`Add operation`)
 	return nil
 }
 
 func (c *Calculator) Subtract(args *Args, result *int) error {
 	*result = args.A - args.B
+	log.Info(`Subtract operation`)
 	return nil
 }
 
 func (c *Calculator) Multiply(args *Args, result *int) error {
 	*result = args.A * args.B
+	log.Info(`Multiply operation`)
 	return nil
 }
 
@@ -46,11 +50,18 @@ func main() {
 		panic(err)
 	}
 
+	log.Info(`Server started`)
 	for {
 		conn, err := listener.Accept()
+		log.Info(`Connection accepted`)
 		if err != nil {
 			continue
 		}
 		go server.ServeCodec(jsonrpc.NewServerCodec(conn))
 	}
+
+	// exercises
+	// 1. Створити клієнт і сервер, використовуючи json-rpc:
+	// Сервер виконує роль кошика інтернет-магазина. Кошик очікує id і name товара. Додає до кошику, оновлює і видаляє.
+	// Клієнт виконує роль клієнта і працює із кошиком: додате, видаляє і редагує товари
 }
